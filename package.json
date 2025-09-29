@@ -1,0 +1,10 @@
+{
+  "name": "Bot-Fly",
+  "private": true,
+  "version": "1.0.0",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node apps/api/server.js",
+    "dev": "NODE_ENV=development node apps/api/server.js"
+  }
+}

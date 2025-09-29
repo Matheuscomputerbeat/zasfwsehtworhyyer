@@ -1,0 +1,12 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^4.19.2",
+    "bcrypt": "^2.4.3",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

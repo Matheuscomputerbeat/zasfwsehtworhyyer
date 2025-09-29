@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Painel</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<style>
+:root{
+  --bg:#0f172a; 
+  --panel:#0b1220; 
+  --text:#e5e7eb; 
+  --muted:#94a3b8; 
+  --accent:#22c55e; 
+  --card:#111827; 
+  --border:#243042;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial
+}
+
+/* Layout */
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+
+/* Sidebar */
+.sidebar{
+  background:var(--panel);border-right:1px solid var(--border);
+  position:sticky;top:0;height:100vh;padding:20px
+}
+.brand{
+  display:flex;align-items:center;gap:12px;font-weight:700;
+  margin-bottom:18px;font-size:20px
+}
+.brand svg{width:28px;height:28px}
+.nav{display:grid;gap:14px}
+
+/* Botões da sidebar (maiores) */
+.btn{
+  display:flex;align-items:center;gap:16px;width:100%;
+  background:#0a1322;border:1px solid var(--border);border-radius:18px;color:var(--text);
+  padding:20px;cursor:pointer;text-align:left;
+  font-size:18px;min-height:68px
+}
+.btn:hover{background:#0e1830}
+.btn svg{width:32px;height:32px;flex:0 0 32px}
+
+/* Conteúdo */
+main{padding:24px;max-width:1200px;margin:0 auto}
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:20px;margin-bottom:20px
+}
+h2{margin:0 0 14px;font-size:22px}
+
+/* Inputs maiores */
+input,textarea{
+  width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);
+  background:#0b1220;color:var(--text);font-size:16px
+}
+
+/* Botões de ação maiores */
+.action{
+  padding:16px 22px;border-radius:14px;border:1px solid var(--border);
+  background:#0b1220;color:var(--text);cursor:pointer;
+  font-size:16px;min-height:56px
+}
+.action.primary{background:var(--accent);border:none;color:#062a16;font-weight:600}
+
+.muted{color:var(--muted);font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* Grupos */
+.group-list{
+  display:grid;gap:10px;max-height:420px;overflow:auto;
+  border:1px solid var(--border);border-radius:14px;padding:12px;background:#0a1322
+}
+.group-item{display:flex;align-items:center;gap:12px;font-size:15px}
+.group-item input{width:auto;transform:scale(1.2)}
+.group-item .id{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:13px;color:#cbd5e1
+}
+.group-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
+/* Mobile / Android */
+@media(max-width:1024px){
+  .app{grid-template-columns:1fr}
+  .sidebar{
+    position:fixed;left:0;top:0;bottom:0;width:86vw;max-width:340px;
+    transform:translateX(-100%);transition:transform .2s ease;z-index:40;padding:18px
+  }
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{
+    position:fixed;top:12px;left:12px;z-index:50;
+    background:#0a1322;border:1px solid var(--border);
+    border-radius:14px;padding:14px;cursor:pointer
+  }
+  .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:45}
+  .scrim.show{display:block}
+  .row{grid-template-columns:1fr}
+
+  /* Aumenta ainda mais no toque */
+  .btn{font-size:20px;padding:22px;min-height:72px}
+  .btn svg{width:34px;height:34px}
+  .action{font-size:18px;padding:18px;min-height:60px}
+}
+
+</style>
+</head>
+<body>
+<button class="hamburger" aria-label="Abrir menu" onclick="toggleMenu()" style="display:none">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="#e5e7eb" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<div class="scrim" id="scrim" onclick="toggleMenu()"></div>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Navegação">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#22c55e" stroke-width="2"/>
+        <path d="M8 12h8M12 8v8" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Painel
+    </div>
+    <div class="nav">
+      <button class="btn" onclick="jump('login')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="8" r="3.5" stroke="#93c5fd" stroke-width="2"/>
+          <path d="M5 19c1.8-3.2 12.2-3.2 14 0" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Login / Cadastro</span>
+      </button>
+      <button class="btn" onclick="jump('bot')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3v8" stroke="#fda4af" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="12" cy="13" r="8" stroke="#fda4af" stroke-width="2"/>
+        </svg>
+        <span>Bot</span>
+      </button>
+      <button class="btn" onclick="jump('mensagens')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 6h16v9H8l-4 4V6z" stroke="#a7f3d0" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <span>Mensagens</span>
+      </button>
+      <button class="btn" onclick="jump('grupos')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="8" cy="8" r="3" stroke="#fde68a" stroke-width="2"/>
+          <circle cx="16" cy="12" r="3" stroke="#fde68a" stroke-width="2"/>
+          <path d="M3 19c1.5-3 9.5-3 11 0M10 19c1.2-2.4 7.8-2.4 9 0" stroke="#fde68a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Grupos</span>
+      </button>
+      <button class="btn" onclick="jump('horarios')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8" stroke="#c7d2fe" stroke-width="2"/>
+          <path d="M12 8v5l3 2" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Horários</span>
+      </button>
+      <button class="btn" onclick="jump('atencao')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3l9 16H3l9-16z" stroke="#f59e0b" stroke-width="2"/>
+          <path d="M12 10v4M12 18h.01" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Atenção</span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <section id="login" class="card">
+      <h2>Login / Cadastro</h2>
+      <div class="row">
+        <div>
+          <h3>Cadastrar</h3>
+          <input id="su_user" placeholder="usuário">
+          <input id="su_pass" type="password" placeholder="senha" style="margin-top:8px">
+          <div class="group-actions"><button class="action primary" onclick="signup()">Criar conta</button></div>
+        </div>
+        <div>
+          <h3>Entrar</h3>
+          <input id="li_user" placeholder="usuário">
+          <input id="li_pass" type="password" placeholder="senha" style="margin-top:8px">
+          <div class="group-actions"><button class="action primary" onclick="login()">Entrar</button></div>
+        </div>
+      </div>
+      <div class="muted" id="authStatus"></div>
+    </section>
+
+    <section id="bot" class="card">
+      <h2>Bot</h2>
+      <div class="group-actions">
+        <button class="action" onclick="setPower(true)">Desligar</button>
+        <button class="action primary" onclick="setPower(false)">Ligar</button>
+        <span class="muted" id="powerState"></span>
+      </div>
+    </section>
+
+    <section id="mensagens" class="card">
+      <h2>Mensagens</h2>
+      <textarea id="message" rows="6" placeholder="Mensagem padrão"></textarea>
+      <div class="group-actions">
+        <button class="action primary" onclick="saveMessage()">Salvar</button>
+        <span class="muted" id="msgStatus"></span>
+      </div>
+    </section>
+
+    <section id="grupos" class="card">
+      <h2>Grupos</h2>
+      <input id="buscaGrupos" placeholder="Filtrar grupos (ex: @g.us)">
+      <div class="group-actions">
+        <button class="action" onclick="colocarExemplo()">Exemplo</button>
+        <button class="action" onclick="colarLista()">Colar lista</button>
+        <button class="action" onclick="marcar(true)">Marcar tudo</button>
+        <button class="action" onclick="marcar(false)">Desmarcar</button>
+        <button class="action primary" onclick="saveGroups()">Salvar Grupos</button>
+        <span class="muted" id="grpStatus"></span>
+      </div>
+      <div id="groupCheckboxes" class="group-list" aria-label="Lista de grupos"></div>
+    </section>
+
+    <section id="horarios" class="card">
+      <h2>Horários</h2>
+      <textarea id="schedule" rows="4" placeholder="09:00, 14:00"></textarea>
+      <div class="group-actions">
+        <button class="action primary" onclick="saveSchedule()">Salvar</button>
+        <span class="muted" id="schStatus"></span>
+      </div>
+    </section>
+
+    <section id="atencao" class="card">
+      <h2>Atenção</h2>
+      <div class="muted"><strong>Importante:</strong><strong> Não use WhatsApp pessoal. Use conta separada.</strong></div>
+    </section>
+  </main>
+</div>
+
+<script>
+// --- layout responsivo ---
+function toggleMenu(){
+  const sb=document.getElementById('sidebar'); const s=document.getElementById('scrim');
+  sb.classList.toggle('open'); s.classList.toggle('show');
+}
+function jump(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if (window.matchMedia("(max-width:1024px)").matches) toggleMenu(); }
+(function(){ if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
+
+// --- auth + chamadas ---
+let token = localStorage.getItem('token') || '';
+function authHeaders(){ return { 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }; }
+
+// carrega e renderiza lista de grupos como checkboxes
+function renderGroups(arr){
+  const box=document.getElementById('groupCheckboxes');
+  box.innerHTML='';
+  arr.forEach(id=>{
+    const label=document.createElement('label'); label.className='group-item';
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.value=id; cb.checked=true;
+    const span=document.createElement('span'); span.className='id'; span.textContent=id;
+    label.appendChild(cb); label.appendChild(span); box.appendChild(label);
+  });
+}
+
+// filtro de grupos
+document.addEventListener('input', (e)=>{
+  if(e.target && e.target.id==='buscaGrupos'){
+    const q=e.target.value.toLowerCase();
+    document.querySelectorAll('#groupCheckboxes .group-item').forEach(li=>{
+      const t = li.querySelector('.id').textContent.toLowerCase();
+      li.style.display = t.includes(q) ? '' : 'none';
+    });
+  }
+});
+
+// helpers
+function marcar(on){
+  document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on);
+}
+function colocarExemplo(){
+  const demo = ["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"];
+  renderGroups(demo);
+}
+async function colarLista(){
+  const txt = prompt('Cole a lista: JSON ["...@g.us",...] OU um por linha');
+  if(!txt) return;
+  const arr = txt.trim().startsWith('[') ? JSON.parse(txt) : txt.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+  renderGroups(arr);
+}
+
+// API
+async function signup(){
+  const r = await fetch('/api/auth/signup', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username: su_user.value, password: su_pass.value })});
+  const j=await r.json(); authStatus.textContent=JSON.stringify(j); if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
+}
+async function login(){
+  const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username: li_user.value, password: li_pass.value })});
+  const j=await r.json(); authStatus.textContent=JSON.stringify(j); if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
+}
+async function refresh(){
+  if(!token) return;
+  try{
+    const p = await fetch('/api/api/power', { headers:authHeaders() }).then(r=>r.json());
+    powerState.textContent = p.disabled ? 'Desligado' : 'Ligado';
+    message.value = await fetch('/api/api/message', { headers:authHeaders() }).then(r=>r.text());
+    const g = await fetch('/api/api/groups', { headers:authHeaders() }).then(r=>r.json());
+    // g é JSON array de IDs de grupo -> marcar todos
+    if(Array.isArray(g) && g.length) renderGroups(g);
+    schedule.value = await fetch('/api/api/schedule', { headers:authHeaders() }).then(r=>r.text());
+  }catch{}
+}
+async function setPower(off){
+  await fetch('/api/api/power', { method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off }) });
+  refresh();
+}
+async function saveMessage(){
+  await fetch('/api/api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
+  msgStatus.textContent='Salvo.';
+}
+async function saveGroups(){
+  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
+    .filter(c=>c.checked).map(c=>c.value);
+  await fetch('/api/api/groups', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
+  grpStatus.textContent='Salvo.';
+}
+async function saveSchedule(){
+  await fetch('/api/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
+  schStatus.textContent='Salvo.';
+}
+refresh();
+</script>
+
+<script>
+// PWA mínimo
+if('serviceWorker' in navigator){ addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) ); }
+</script>
+</body>
+</html>
