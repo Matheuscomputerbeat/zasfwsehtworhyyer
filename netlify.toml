@@ -1,16 +1,13 @@
-# AUTH: backend NÃO tem /api no prefixo
 [[redirects]]
   from = "/api/auth/*"
   to   = "https://zasfwsehtworhyyer.onrender.com/auth/:splat"
   status = 200
 
-# DEMAIS ROTAS /api/*
 [[redirects]]
   from = "/api/*"
   to   = "https://zasfwsehtworhyyer.onrender.com/api/:splat"
   status = 200
 
-# SPA fallback
 [[redirects]]
   from = "/*"
   to   = "/index.html"
