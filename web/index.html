@@ -368,6 +368,52 @@ async function saveSchedule(){
   await fetch('/api/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
   schStatus.textContent='Salvo.';
 }
+  let qrTimer = null;
+
+function setChip(status){
+  const chip = document.getElementById('qrChip');
+  chip.classList.remove('ok','wait','err');
+  if(status==='connected'){ chip.classList.add('ok'); chip.textContent='Status: conectado'; }
+  else if(status==='waiting_qr'){ chip.classList.add('wait'); chip.textContent='Status: esperando QR'; }
+  else if(status==='connecting'){ chip.classList.add('wait'); chip.textContent='Status: conectando...'; }
+  else { chip.classList.add('err'); chip.textContent='Status: erro'; }
+}
+
+async function qrFetch(){
+  const r = await fetch('/api/qr', { headers: authHeaders() });
+  if(r.status===204){ setChip('connected'); document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>'; return; }
+  if(r.status===202){ setChip('connecting'); return; }
+  if(!r.ok){ setChip('error'); return; }
+  const blob = await r.blob();
+  const url = URL.createObjectURL(blob);
+  const imgBox = document.getElementById('qrImg');
+  imgBox.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = url; img.width=260; img.height=260; img.alt='QR WhatsApp';
+  imgBox.appendChild(img);
+  setChip('waiting_qr');
+}
+
+async function qrPoll(){
+  const r = await fetch('/api/qr/status', { headers: authHeaders() });
+  if(!r.ok) return setChip('error');
+  const j = await r.json();
+  setChip(j.status);
+  if(j.status==='connected'){ qrStop(); }
+}
+
+function qrStart(){
+  if(!localStorage.getItem('token')){ alert('Faça login primeiro.'); return; }
+  qrFetch();
+  qrPoll();
+  if(qrTimer) clearInterval(qrTimer);
+  qrTimer = setInterval(qrPoll, 3000);
+}
+
+function qrStop(){
+  if(qrTimer) { clearInterval(qrTimer); qrTimer=null; }
+}
+
 refresh();
 </script>
 
