@@ -343,11 +343,11 @@ async function refresh(){
   try{
     const p = await fetch('/api/api/power', { headers:authHeaders() }).then(r=>r.json());
     powerState.textContent = p.disabled ? 'Desligado' : 'Ligado';
-    message.value = await fetch('/api/api/message', { headers:authHeaders() }).then(r=>r.text());
-    const g = await fetch('/api/api/groups', { headers:authHeaders() }).then(r=>r.json());
+    message.value = await fetch('api/message', { headers:authHeaders() }).then(r=>r.text());
+    const g = await fetch('api/group', { headers:authHeaders() }).then(r=>r.json());
     // g é JSON array de IDs de grupo -> marcar todos
     if(Array.isArray(g) && g.length) renderGroups(g);
-    schedule.value = await fetch('/api/api/schedule', { headers:authHeaders() }).then(r=>r.text());
+    schedule.value = await fetch('/api/schedule', { headers:authHeaders() }).then(r=>r.text());
   }catch{}
 }
 async function setPower(off){
@@ -355,17 +355,17 @@ async function setPower(off){
   refresh();
 }
 async function saveMessage(){
-  await fetch('/api/api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
+  await fetch('api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
   msgStatus.textContent='Salvo.';
 }
 async function saveGroups(){
   const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
     .filter(c=>c.checked).map(c=>c.value);
-  await fetch('/api/api/groups', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
+  await fetch('api/group', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
   grpStatus.textContent='Salvo.';
 }
 async function saveSchedule(){
-  await fetch('/api/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
+  await fetch('/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
   schStatus.textContent='Salvo.';
 }
   let qrTimer = null;
