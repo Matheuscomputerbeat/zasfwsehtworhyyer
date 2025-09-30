@@ -7,9 +7,9 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "@whiskeysockets/baileys": "^6.7.9",
+    "qrcode": "^1.5.3"
   },
-  "scripts": {
-    "start": "node server.js"
-  }
+  "scripts": { "start": "node server.js" }
 }
