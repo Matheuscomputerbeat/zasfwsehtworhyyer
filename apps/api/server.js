@@ -8,6 +8,8 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const { makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys');
+const QRCode = require('qrcode');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -81,6 +83,66 @@ app.get('/api/power', auth, (req, res) => {
   let disabled = false;
   try { disabled = JSON.parse(fs.readFileSync(p, 'utf8')).global === true; } catch {}
   res.json({ disabled });
+});
+// --- WhatsApp sessions ---
+const sessions = new Map(); // user -> { sock, status, lastQR, startedAt }
+
+async function startSession(user) {
+  const d = userDir(user);
+  const authDir = path.join(d, 'wa-auth'); // credenciais por usuário
+  const { state, saveCreds } = await useMultiFileAuthState(authDir);
+  const { version } = await fetchLatestBaileysVersion();
+
+  const sock = makeWASocket({
+    version,
+    auth: state,
+    printQRInTerminal: false,
+    browser: ['Chrome','Chrome','120']
+  });
+
+  const s = { sock, status: 'connecting', lastQR: null, startedAt: Date.now() };
+  sessions.set(user, s);
+
+  sock.ev.on('creds.update', saveCreds);
+  sock.ev.on('connection.update', ({ connection, qr }) => {
+    if (qr) { s.lastQR = qr; s.status = 'waiting_qr'; }
+    if (connection === 'open') s.status = 'connected';
+    if (connection === 'close') s.status = 'closed';
+  });
+
+  return s;
+}
+
+async function ensureSession(user) {
+  return sessions.get(user) || startSession(user);
+}
+// ----- WhatsApp QR/Status -----
+app.get('/api/qr', auth, async (req, res) => {
+  try {
+    const s = await ensureSession(req.user);
+    if (s.status === 'connected') return res.status(204).end();
+    if (!s.lastQR) return res.status(202).json({ status: s.status || 'connecting' });
+    const png = await QRCode.toBuffer(s.lastQR, { type: 'png', width: 256, margin: 1 });
+    res.type('image/png').send(png);
+  } catch (e) {
+    res.status(500).json({ error: 'qr' });
+  }
+});
+
+app.get('/api/qr/status', auth, async (req, res) => {
+  try {
+    const s = await ensureSession(req.user);
+    res.json({ status: s.status || 'connecting' });
+  } catch {
+    res.json({ status: 'connecting' });
+  }
+});
+
+app.post('/api/logout', auth, async (req, res) => {
+  const s = sessions.get(req.user);
+  try { if (s?.sock) await s.sock.logout(); } catch {}
+  sessions.delete(req.user);
+  res.json({ ok: true });
 });
 
 // ----- Dados -----
