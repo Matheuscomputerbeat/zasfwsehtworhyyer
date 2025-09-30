@@ -9,34 +9,19 @@
 
 <style>
 :root{
-  --bg:#0f172a; 
-  --panel:#0b1220; 
-  --text:#e5e7eb; 
-  --muted:#94a3b8; 
-  --accent:#22c55e; 
-  --card:#111827; 
-  --border:#243042;
+  --bg:#0f172a; --panel:#0b1220; --text:#e5e7eb; --muted:#94a3b8;
+  --accent:#22c55e; --card:#111827; --border:#243042;
 }
-
 *{box-sizing:border-box}
 html,body{height:100%}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
 
 /* Layout */
 .app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
 
 /* Sidebar */
-.sidebar{
-  background:var(--panel);border-right:1px solid var(--border);
-  position:sticky;top:0;height:100vh;padding:20px
-}
-.brand{
-  display:flex;align-items:center;gap:12px;font-weight:700;
-  margin-bottom:18px;font-size:20px
-}
+.sidebar{background:var(--panel);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;padding:20px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;margin-bottom:18px;font-size:20px}
 .brand svg{width:28px;height:28px}
 .nav{display:grid;gap:14px}
 
@@ -44,18 +29,14 @@ body{
 .btn{
   display:flex;align-items:center;gap:16px;width:100%;
   background:#0a1322;border:1px solid var(--border);border-radius:18px;color:var(--text);
-  padding:20px;cursor:pointer;text-align:left;
-  font-size:18px;min-height:68px
+  padding:20px;cursor:pointer;text-align:left;font-size:18px;min-height:68px
 }
 .btn:hover{background:#0e1830}
 .btn svg{width:32px;height:32px;flex:0 0 32px}
 
 /* Conteúdo */
 main{padding:24px;max-width:1200px;margin:0 auto}
-.card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:18px;padding:20px;margin-bottom:20px
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:20px}
 h2{margin:0 0 14px;font-size:22px}
 
 /* Inputs maiores */
@@ -67,8 +48,7 @@ input,textarea{
 /* Botões de ação maiores */
 .action{
   padding:16px 22px;border-radius:14px;border:1px solid var(--border);
-  background:#0b1220;color:var(--text);cursor:pointer;
-  font-size:16px;min-height:56px
+  background:#0b1220;color:var(--text);cursor:pointer;font-size:16px;min-height:56px
 }
 .action.primary{background:var(--accent);border:none;color:#062a16;font-weight:600}
 
@@ -82,11 +62,21 @@ input,textarea{
 }
 .group-item{display:flex;align-items:center;gap:12px;font-size:15px}
 .group-item input{width:auto;transform:scale(1.2)}
-.group-item .id{
-  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size:13px;color:#cbd5e1
-}
+.group-item .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#cbd5e1}
 .group-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
+/* QR */
+.qr-wrap{display:grid;gap:14px}
+.qr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.qr-img{
+  width:260px;height:260px;image-rendering:pixelated;background:#0a1322;
+  border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center
+}
+.qr-status{font-size:14px;color:var(--muted)}
+.qr-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
+.qr-chip.ok{background:#16a34a22;border-color:#16a34a}
+.qr-chip.wait{background:#eab30822;border-color:#eab308}
+.qr-chip.err{background:#ef444422;border-color:#ef4444}
 
 /* Mobile / Android */
 @media(max-width:1024px){
@@ -104,24 +94,10 @@ input,textarea{
   .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:45}
   .scrim.show{display:block}
   .row{grid-template-columns:1fr}
-
-  /* Aumenta ainda mais no toque */
   .btn{font-size:20px;padding:22px;min-height:72px}
   .btn svg{width:34px;height:34px}
   .action{font-size:18px;padding:18px;min-height:60px}
 }
-.qr-wrap{display:grid;gap:14px}
-.qr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.qr-img{
-  width:260px;height:260px;image-rendering:pixelated;background:#0a1322;
-  border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center
-}
-.qr-status{font-size:14px;color:var(--muted)}
-.qr-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
-.qr-chip.ok{background:#16a34a22;border-color:#16a34a}
-.qr-chip.wait{background:#eab30822;border-color:#eab308}
-.qr-chip.err{background:#ef444422;border-color:#ef4444}
-
 </style>
 </head>
 <body>
@@ -146,6 +122,13 @@ input,textarea{
           <path d="M5 19c1.8-3.2 12.2-3.2 14 0" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <span>Login / Cadastro</span>
+      </button>
+      <button class="btn" onclick="jump('conexao')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8" stroke="#34d399" stroke-width="2"/>
+          <path d="M8 12h8" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Conexão WhatsApp</span>
       </button>
       <button class="btn" onclick="jump('bot')">
         <svg viewBox="0 0 24 24" fill="none">
@@ -175,13 +158,6 @@ input,textarea{
         </svg>
         <span>Horários</span>
       </button>
-      <button class="btn" onclick="jump('conexao')">
-      <svg viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" stroke="#34d399" stroke-width="2"/>
-    <path d="M8 12h8" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
-  </svg>
-  <span>Conexão WhatsApp</span>
-  </button>
       <button class="btn" onclick="jump('atencao')">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M12 3l9 16H3l9-16z" stroke="#f59e0b" stroke-width="2"/>
@@ -211,22 +187,24 @@ input,textarea{
       </div>
       <div class="muted" id="authStatus"></div>
     </section>
+
     <section id="conexao" class="card">
-  <h2>Conexão WhatsApp</h2>
-  <div class="qr-wrap">
-    <div class="qr-row">
-      <button class="action primary" onclick="qrStart()">Mostrar QR</button>
-      <button class="action" onclick="qrStop()">Parar</button>
-      <span id="qrChip" class="qr-chip wait">Status: aguardando</span>
-    </div>
-    <div class="qr-row">
-      <div id="qrImg" class="qr-img"><span class="muted">QR aqui</span></div>
-      <div class="qr-status" id="qrStatus">
-        1) Clique “Mostrar QR” → 2) WhatsApp > Dispositivos conectados → 3) Escaneie o QR
+      <h2>Conexão WhatsApp</h2>
+      <div class="qr-wrap">
+        <div class="qr-row">
+          <button class="action primary" onclick="qrStart()">Mostrar QR</button>
+          <button class="action" onclick="qrStop()">Parar</button>
+          <span id="qrChip" class="qr-chip wait">Status: aguardando</span>
+        </div>
+        <div class="qr-row">
+          <div id="qrImg" class="qr-img"><span class="muted">QR aqui</span></div>
+          <div class="qr-status" id="qrStatus">
+            1) Clique “Mostrar QR” → 2) WhatsApp > Dispositivos conectados → 3) Escaneie o QR
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
     </section>
+
     <section id="bot" class="card">
       <h2>Bot</h2>
       <div class="group-actions">
@@ -270,7 +248,7 @@ input,textarea{
 
     <section id="atencao" class="card">
       <h2>Atenção</h2>
-      <div class="muted"><strong>Importante:</strong><strong> Não use WhatsApp pessoal. Use conta separada.</strong></div>
+      <div class="muted"><strong>Importante:</strong> Não use WhatsApp pessoal. Use conta separada.</div>
     </section>
   </main>
 </div>
@@ -281,14 +259,20 @@ function toggleMenu(){
   const sb=document.getElementById('sidebar'); const s=document.getElementById('scrim');
   sb.classList.toggle('open'); s.classList.toggle('show');
 }
-function jump(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if (window.matchMedia("(max-width:1024px)").matches) toggleMenu(); }
-(function(){ if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
+function jump(id){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
+  if (window.matchMedia("(max-width:1024px)").matches) toggleMenu();
+}
+(function(){
+  if (window.matchMedia("(max-width:1024px)").matches)
+    document.querySelector('.hamburger').style.display='inline-flex';
+})();
 
 // --- auth + chamadas ---
 let token = localStorage.getItem('token') || '';
 function authHeaders(){ return { 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }; }
 
-// carrega e renderiza lista de grupos como checkboxes
+// render grupos
 function renderGroups(arr){
   const box=document.getElementById('groupCheckboxes');
   box.innerHTML='';
@@ -326,49 +310,67 @@ async function colarLista(){
   renderGroups(arr);
 }
 
-// API
+// --- API: auth
 async function signup(){
-  const r = await fetch('/api/auth/signup', { method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username: su_user.value, password: su_pass.value })});
-  const j=await r.json(); authStatus.textContent=JSON.stringify(j); if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
+  const r = await fetch('/api/auth/signup', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username: su_user.value, password: su_pass.value })
+  });
+  const j=await r.json();
+  authStatus.textContent=JSON.stringify(j);
+  if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
 async function login(){
-  const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username: li_user.value, password: li_pass.value })});
-  const j=await r.json(); authStatus.textContent=JSON.stringify(j); if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
+  const r = await fetch('/api/auth/login', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ username: li_user.value, password: li_pass.value })
+  });
+  const j=await r.json();
+  authStatus.textContent=JSON.stringify(j);
+  if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
+
+// --- API: dados e power
 async function refresh(){
   if(!token) return;
   try{
-    const p = await fetch('/api/api/power', { headers:authHeaders() }).then(r=>r.json());
+    const p = await fetch('/api/power', { headers:authHeaders() }).then(r=>r.json());
     powerState.textContent = p.disabled ? 'Desligado' : 'Ligado';
-    message.value = await fetch('api/message', { headers:authHeaders() }).then(r=>r.text());
-    const g = await fetch('api/group', { headers:authHeaders() }).then(r=>r.json());
-    // g é JSON array de IDs de grupo -> marcar todos
+    message.value = await fetch('/api/message', { headers:authHeaders() }).then(r=>r.text());
+    const g = await fetch('/api/groups', { headers:authHeaders() }).then(r=>r.json());
     if(Array.isArray(g) && g.length) renderGroups(g);
     schedule.value = await fetch('/api/schedule', { headers:authHeaders() }).then(r=>r.text());
-  }catch{}
+  }catch(e){}
 }
 async function setPower(off){
-  await fetch('/api/api/power', { method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off }) });
+  await fetch('/api/power', {
+    method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off })
+  });
   refresh();
 }
 async function saveMessage(){
-  await fetch('api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
+  await fetch('/api/message', {
+    method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value })
+  });
   msgStatus.textContent='Salvo.';
 }
 async function saveGroups(){
   const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
     .filter(c=>c.checked).map(c=>c.value);
-  await fetch('api/group', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
+  await fetch('/api/groups', {
+    method:'POST', headers:authHeaders(), body: JSON.stringify(selected)
+  });
   grpStatus.textContent='Salvo.';
 }
 async function saveSchedule(){
-  await fetch('/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
+  await fetch('/api/schedule', {
+    method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value })
+  });
   schStatus.textContent='Salvo.';
 }
-  let qrTimer = null;
 
+// --- QR
+let qrTimer = null;
 function setChip(status){
   const chip = document.getElementById('qrChip');
   chip.classList.remove('ok','wait','err');
@@ -377,10 +379,13 @@ function setChip(status){
   else if(status==='connecting'){ chip.classList.add('wait'); chip.textContent='Status: conectando...'; }
   else { chip.classList.add('err'); chip.textContent='Status: erro'; }
 }
-
 async function qrFetch(){
   const r = await fetch('/api/qr', { headers: authHeaders() });
-  if(r.status===204){ setChip('connected'); document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>'; return; }
+  if(r.status===204){
+    setChip('connected');
+    document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>';
+    return;
+  }
   if(r.status===202){ setChip('connecting'); return; }
   if(!r.ok){ setChip('error'); return; }
   const blob = await r.blob();
@@ -392,15 +397,13 @@ async function qrFetch(){
   imgBox.appendChild(img);
   setChip('waiting_qr');
 }
-
 async function qrPoll(){
   const r = await fetch('/api/qr/status', { headers: authHeaders() });
-  if(!r.ok) return setChip('error');
+  if(!r.ok){ setChip('error'); return; }
   const j = await r.json();
   setChip(j.status);
   if(j.status==='connected'){ qrStop(); }
 }
-
 function qrStart(){
   if(!localStorage.getItem('token')){ alert('Faça login primeiro.'); return; }
   qrFetch();
@@ -408,9 +411,8 @@ function qrStart(){
   if(qrTimer) clearInterval(qrTimer);
   qrTimer = setInterval(qrPoll, 3000);
 }
-
 function qrStop(){
-  if(qrTimer) { clearInterval(qrTimer); qrTimer=null; }
+  if(qrTimer){ clearInterval(qrTimer); qrTimer=null; }
 }
 
 refresh();
@@ -418,7 +420,9 @@ refresh();
 
 <script>
 // PWA mínimo
-if('serviceWorker' in navigator){ addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) ); }
+if('serviceWorker' in navigator){
+  addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
 </script>
 </body>
 </html>
