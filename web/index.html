@@ -111,6 +111,17 @@ input,textarea{
   .btn svg{width:34px;height:34px}
   .action{font-size:18px;padding:18px;min-height:60px}
 }
+.qr-wrap{display:grid;gap:14px}
+.qr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.qr-img{
+  width:260px;height:260px;image-rendering:pixelated;background:#0a1322;
+  border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center
+}
+.qr-status{font-size:14px;color:var(--muted)}
+.qr-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
+.qr-chip.ok{background:#16a34a22;border-color:#16a34a}
+.qr-chip.wait{background:#eab30822;border-color:#eab308}
+.qr-chip.err{background:#ef444422;border-color:#ef4444}
 
 </style>
 </head>
@@ -165,6 +176,13 @@ input,textarea{
         </svg>
         <span>Horários</span>
       </button>
+      <button class="btn" onclick="jump('conexao')">
+      <svg viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="#34d399" stroke-width="2"/>
+    <path d="M8 12h8" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <span>Conexão WhatsApp</span>
+  </button>
       <button class="btn" onclick="jump('atencao')">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M12 3l9 16H3l9-16z" stroke="#f59e0b" stroke-width="2"/>
@@ -194,7 +212,22 @@ input,textarea{
       </div>
       <div class="muted" id="authStatus"></div>
     </section>
-
+    <section id="conexao" class="card">
+  <h2>Conexão WhatsApp</h2>
+  <div class="qr-wrap">
+    <div class="qr-row">
+      <button class="action primary" onclick="qrStart()">Mostrar QR</button>
+      <button class="action" onclick="qrStop()">Parar</button>
+      <span id="qrChip" class="qr-chip wait">Status: aguardando</span>
+    </div>
+    <div class="qr-row">
+      <div id="qrImg" class="qr-img"><span class="muted">QR aqui</span></div>
+      <div class="qr-status" id="qrStatus">
+        1) Clique “Mostrar QR” → 2) WhatsApp > Dispositivos conectados → 3) Escaneie o QR
+      </div>
+    </div>
+  </div>
+    </section>
     <section id="bot" class="card">
       <h2>Bot</h2>
       <div class="group-actions">
