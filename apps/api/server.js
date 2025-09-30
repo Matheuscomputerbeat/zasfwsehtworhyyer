@@ -84,6 +84,19 @@ app.get('/api/power', auth, (req, res) => {
 });
 
 // ----- Dados -----
+app.get('/api/schedule', auth, (req, res) => {
+  const d = userDir(req.user);
+  const p = path.join(d, 'schedule.txt');
+  res.type('text/plain').send(fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '');
+});
+
+app.post('/api/schedule', auth, (req, res) => {
+  const d = userDir(req.user);
+  const text = String((req.body && req.body.text) || '');
+  fs.writeFileSync(path.join(d, 'schedule.txt'), text);
+  res.json({ ok: true });
+});
+
 app.get('/api/message', auth, (req, res) => {
   const d = userDir(req.user);
   const p = path.join(d, 'message.txt');
