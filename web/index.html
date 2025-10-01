@@ -8,15 +8,7 @@
 <meta name="theme-color" content="#0f172a">
 
 <style>
-:root{
-  --bg:#0f172a; 
-  --panel:#0b1220; 
-  --text:#e5e7eb; 
-  --muted:#94a3b8; 
-  --accent:#22c55e; 
-  --card:#111827; 
-  --border:#243042;
-}
+:root{--bg:#0f172a;--panel:#0b1220;--text:#e5e7eb;--muted:#94a3b8;--accent:#22c55e;--card:#111827;--border:#243042}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
@@ -223,13 +215,12 @@ function toggleMenu(){
   sb.classList.toggle('open'); s.classList.toggle('show');
 }
 function jump(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if (window.matchMedia("(max-width:1024px)").matches) toggleMenu(); }
-(() => { if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
+(()=>{ if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
 
 // --- auth + chamadas ---
 let token = localStorage.getItem('token') || '';
 function authHeaders(){ return { 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }; }
 
-// carrega e renderiza lista de grupos como checkboxes
 function renderGroups(arr){
   const box=document.getElementById('groupCheckboxes');
   box.innerHTML='';
@@ -241,145 +232,101 @@ function renderGroups(arr){
   });
 }
 
-// filtro de grupos
-document.addEventListener('input', (e)=>{
+document.addEventListener('input',(e)=>{
   if(e.target && e.target.id==='buscaGrupos'){
     const q=e.target.value.toLowerCase();
     document.querySelectorAll('#groupCheckboxes .group-item').forEach(li=>{
-      const t = li.querySelector('.id').textContent.toLowerCase();
-      li.style.display = t.includes(q) ? '' : 'none';
+      const t=li.querySelector('.id').textContent.toLowerCase();
+      li.style.display=t.includes(q)?'':'none';
     });
   }
 });
 
-// helpers
-function marcar(on){
-  document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on);
-}
-function colocarExemplo(){
-  renderGroups(["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"]);
-}
+function marcar(on){ document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on); }
+function colocarExemplo(){ renderGroups(["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"]); }
 async function colarLista(){
-  const txt = prompt('Cole a lista: JSON ["...@g.us",...] OU um por linha');
+  const txt=prompt('Cole a lista: JSON ["...@g.us",...] OU um por linha');
   if(!txt) return;
   const arr = txt.trim().startsWith('[') ? JSON.parse(txt) : txt.split(/\n+/).map(s=>s.trim()).filter(Boolean);
   renderGroups(arr);
 }
 
-// --------- API (TODAS as rotas corrigidas) ----------
+// --------- API (corrigidas) ----------
 async function signup(){
-  const r = await fetch('/api/auth/signup', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username: su_user.value, password: su_pass.value })
-  });
+  const r=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:su_user.value,password:su_pass.value})});
   const j=await r.json(); authStatus.textContent=JSON.stringify(j);
   if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
 async function login(){
-  const r = await fetch('/api/auth/login', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ username: li_user.value, password: li_pass.value })
-  });
+  const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:li_user.value,password:li_pass.value})});
   const j=await r.json(); authStatus.textContent=JSON.stringify(j);
   if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
-
 async function refresh(){
   if(!token) return;
   try{
-    const p = await fetch('/api/power', { headers:authHeaders() }).then(r=>r.json());
-    powerState.textContent = (p.disabled ? 'Desligado' : 'Ligado');
-
-    message.value = await fetch('/api/message', { headers:authHeaders() }).then(r=>r.text());
-
-    const g = await fetch('/api/groups', { headers:authHeaders() }).then(r=>r.json());
-    if(Array.isArray(g) && g.length) renderGroups(g);
-
-    schedule.value = await fetch('/api/schedule', { headers:authHeaders() }).then(r=>r.text());
-  }catch(e){ /* silencioso */ }
+    const p=await fetch('/api/power',{headers:authHeaders()}).then(r=>r.json());
+    powerState.textContent=p.disabled?'Desligado':'Ligado';
+    message.value=await fetch('/api/message',{headers:authHeaders()}).then(r=>r.text());
+    const g=await fetch('/api/groups',{headers:authHeaders()}).then(r=>r.json());
+    if(Array.isArray(g)&&g.length) renderGroups(g);
+    schedule.value=await fetch('/api/schedule',{headers:authHeaders()}).then(r=>r.text());
+  }catch{}
 }
-
 async function setPower(off){
-  await fetch('/api/power', {
-    method:'POST', headers:authHeaders(),
-    body: JSON.stringify({ on: !off })
-  });
+  await fetch('/api/power',{method:'POST',headers:authHeaders(),body:JSON.stringify({on:!off})});
   refresh();
 }
 async function saveMessage(){
-  await fetch('/api/message', {
-    method:'POST', headers:authHeaders(),
-    body: JSON.stringify({ text: message.value })
-  });
+  await fetch('/api/message',{method:'POST',headers:authHeaders(),body:JSON.stringify({text:message.value})});
   msgStatus.textContent='Salvo.';
 }
 async function saveGroups(){
-  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
-    .filter(c=>c.checked).map(c=>c.value);
-  await fetch('/api/groups', {
-    method:'POST', headers:authHeaders(),
-    body: JSON.stringify(selected)
-  });
+  const selected=Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]')).filter(c=>c.checked).map(c=>c.value);
+  await fetch('/api/groups',{method:'POST',headers:authHeaders(),body:JSON.stringify(selected)});
   grpStatus.textContent='Salvo.';
 }
 async function saveSchedule(){
-  await fetch('/api/schedule', {
-    method:'POST', headers:authHeaders(),
-    body: JSON.stringify({ text: schedule.value })
-  });
+  await fetch('/api/schedule',{method:'POST',headers:authHeaders(),body:JSON.stringify({text:schedule.value})});
   schStatus.textContent='Salvo.';
 }
 
-// --------- QR (rotas certas) ----------
-let qrTimer = null;
+// --------- QR ----------
+let qrTimer=null;
 function setChip(status){
-  const chip = document.getElementById('qrChip');
+  const chip=document.getElementById('qrChip');
   chip.classList.remove('ok','wait','err');
-  if(status==='connected'){ chip.classList.add('ok'); chip.textContent='Status: conectado'; }
-  else if(status==='waiting_qr'){ chip.classList.add('wait'); chip.textContent='Status: esperando QR'; }
-  else if(status==='connecting'){ chip.classList.add('wait'); chip.textContent='Status: conectando...'; }
-  else { chip.classList.add('err'); chip.textContent='Status: erro'; }
+  if(status==='connected'){chip.classList.add('ok');chip.textContent='Status: conectado';}
+  else if(status==='waiting_qr'){chip.classList.add('wait');chip.textContent='Status: esperando QR';}
+  else if(status==='connecting'){chip.classList.add('wait');chip.textContent='Status: conectando...';}
+  else {chip.classList.add('err');chip.textContent='Status: erro';}
 }
 async function qrFetch(){
-  const r = await fetch('/api/qr', { headers: authHeaders() });
-  if(r.status===204){ setChip('connected'); document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>'; return; }
-  if(r.status===202){ setChip('connecting'); return; }
-  if(!r.ok){ setChip('error'); return; }
-  const blob = await r.blob();
-  const url = URL.createObjectURL(blob);
-  const imgBox = document.getElementById('qrImg');
-  imgBox.innerHTML = '';
-  const img = document.createElement('img');
-  img.src = url; img.width=260; img.height=260; img.alt='QR WhatsApp';
-  imgBox.appendChild(img);
-  setChip('waiting_qr');
+  const r=await fetch('/api/qr',{headers:authHeaders()});
+  if(r.status===204){setChip('connected');document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>';return;}
+  if(r.status===202){setChip('connecting');return;}
+  if(!r.ok){setChip('error');return;}
+  const blob=await r.blob(); const url=URL.createObjectURL(blob);
+  const imgBox=document.getElementById('qrImg'); imgBox.innerHTML='';
+  const img=document.createElement('img'); img.src=url; img.width=260; img.height=260; img.alt='QR WhatsApp';
+  imgBox.appendChild(img); setChip('waiting_qr');
 }
 async function qrPoll(){
-  const r = await fetch('/api/qr/status', { headers: authHeaders() });
+  const r=await fetch('/api/qr/status',{headers:authHeaders()});
   if(!r.ok) return setChip('error');
-  const j = await r.json();
-  setChip(j.status);
+  const j=await r.json(); setChip(j.status);
   if(j.status==='connected'){ qrStop(); }
 }
 function qrStart(){
   if(!localStorage.getItem('token')){ alert('Faça login primeiro.'); return; }
-  qrFetch();
-  qrPoll();
+  qrFetch(); qrPoll();
   if(qrTimer) clearInterval(qrTimer);
-  qrTimer = setInterval(qrPoll, 3000);
+  qrTimer=setInterval(qrPoll,3000);
 }
-function qrStop(){ if(qrTimer) { clearInterval(qrTimer); qrTimer=null; } }
+function qrStop(){ if(qrTimer){ clearInterval(qrTimer); qrTimer=null; } }
 
 refresh();
 </script>
-
-<script>
-// PWA mínimo
-if('serviceWorker' in navigator){
-  addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) );
-}
-</script>
-
 
 <script>
 // PWA mínimo
