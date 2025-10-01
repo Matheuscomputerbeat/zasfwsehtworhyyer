@@ -223,23 +223,25 @@ function toggleMenu(){
   sb.classList.toggle('open'); s.classList.toggle('show');
 }
 function jump(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if (window.matchMedia("(max-width:1024px)").matches) toggleMenu(); }
-(function(){ if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
+(() => { if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
 
 // --- auth + chamadas ---
 let token = localStorage.getItem('token') || '';
 function authHeaders(){ return { 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }; }
 
-// grupos UI
+// carrega e renderiza lista de grupos como checkboxes
 function renderGroups(arr){
   const box=document.getElementById('groupCheckboxes');
   box.innerHTML='';
-  arr.forEach(id=>{
+  (arr||[]).forEach(id=>{
     const label=document.createElement('label'); label.className='group-item';
     const cb=document.createElement('input'); cb.type='checkbox'; cb.value=id; cb.checked=true;
     const span=document.createElement('span'); span.className='id'; span.textContent=id;
     label.appendChild(cb); label.appendChild(span); box.appendChild(label);
   });
 }
+
+// filtro de grupos
 document.addEventListener('input', (e)=>{
   if(e.target && e.target.id==='buscaGrupos'){
     const q=e.target.value.toLowerCase();
@@ -249,8 +251,14 @@ document.addEventListener('input', (e)=>{
     });
   }
 });
-function marcar(on){ document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on); }
-function colocarExemplo(){ renderGroups(["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"]); }
+
+// helpers
+function marcar(on){
+  document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on);
+}
+function colocarExemplo(){
+  renderGroups(["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"]);
+}
 async function colarLista(){
   const txt = prompt('Cole a lista: JSON ["...@g.us",...] OU um por linha');
   if(!txt) return;
@@ -258,7 +266,7 @@ async function colarLista(){
   renderGroups(arr);
 }
 
-// --- API ---
+// --------- API (TODAS as rotas corrigidas) ----------
 async function signup(){
   const r = await fetch('/api/auth/signup', {
     method:'POST', headers:{'Content-Type':'application/json'},
@@ -280,32 +288,49 @@ async function refresh(){
   if(!token) return;
   try{
     const p = await fetch('/api/power', { headers:authHeaders() }).then(r=>r.json());
-    powerState.textContent = p.disabled ? 'Desligado' : 'Ligado';
+    powerState.textContent = (p.disabled ? 'Desligado' : 'Ligado');
+
     message.value = await fetch('/api/message', { headers:authHeaders() }).then(r=>r.text());
+
     const g = await fetch('/api/groups', { headers:authHeaders() }).then(r=>r.json());
     if(Array.isArray(g) && g.length) renderGroups(g);
+
     schedule.value = await fetch('/api/schedule', { headers:authHeaders() }).then(r=>r.text());
-  }catch{}
+  }catch(e){ /* silencioso */ }
 }
+
 async function setPower(off){
-  await fetch('/api/power', { method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off }) });
+  await fetch('/api/power', {
+    method:'POST', headers:authHeaders(),
+    body: JSON.stringify({ on: !off })
+  });
   refresh();
 }
 async function saveMessage(){
-  await fetch('/api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
+  await fetch('/api/message', {
+    method:'POST', headers:authHeaders(),
+    body: JSON.stringify({ text: message.value })
+  });
   msgStatus.textContent='Salvo.';
 }
 async function saveGroups(){
-  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]')).filter(c=>c.checked).map(c=>c.value);
-  await fetch('/api/groups', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
+  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
+    .filter(c=>c.checked).map(c=>c.value);
+  await fetch('/api/groups', {
+    method:'POST', headers:authHeaders(),
+    body: JSON.stringify(selected)
+  });
   grpStatus.textContent='Salvo.';
 }
 async function saveSchedule(){
-  await fetch('/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
+  await fetch('/api/schedule', {
+    method:'POST', headers:authHeaders(),
+    body: JSON.stringify({ text: schedule.value })
+  });
   schStatus.textContent='Salvo.';
 }
 
-// --- QR ---
+// --------- QR (rotas certas) ----------
 let qrTimer = null;
 function setChip(status){
   const chip = document.getElementById('qrChip');
@@ -338,7 +363,8 @@ async function qrPoll(){
 }
 function qrStart(){
   if(!localStorage.getItem('token')){ alert('Faça login primeiro.'); return; }
-  qrFetch(); qrPoll();
+  qrFetch();
+  qrPoll();
   if(qrTimer) clearInterval(qrTimer);
   qrTimer = setInterval(qrPoll, 3000);
 }
@@ -348,7 +374,18 @@ refresh();
 </script>
 
 <script>
-if('serviceWorker' in navigator){ addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) ); }
+// PWA mínimo
+if('serviceWorker' in navigator){
+  addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) );
+}
+</script>
+
+
+<script>
+// PWA mínimo
+if('serviceWorker' in navigator){
+  addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) );
+}
 </script>
 </body>
 </html>
