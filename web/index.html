@@ -9,88 +9,43 @@
 
 <style>
 :root{
-  --bg:#0f172a; --panel:#0b1220; --text:#e5e7eb; --muted:#94a3b8;
-  --accent:#22c55e; --card:#111827; --border:#243042;
+  --bg:#0f172a; 
+  --panel:#0b1220; 
+  --text:#e5e7eb; 
+  --muted:#94a3b8; 
+  --accent:#22c55e; 
+  --card:#111827; 
+  --border:#243042;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
-
-/* Layout */
 .app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
-
-/* Sidebar */
 .sidebar{background:var(--panel);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;padding:20px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:700;margin-bottom:18px;font-size:20px}
 .brand svg{width:28px;height:28px}
 .nav{display:grid;gap:14px}
-
-/* Botões da sidebar (maiores) */
-.btn{
-  display:flex;align-items:center;gap:16px;width:100%;
-  background:#0a1322;border:1px solid var(--border);border-radius:18px;color:var(--text);
-  padding:20px;cursor:pointer;text-align:left;font-size:18px;min-height:68px
-}
+.btn{display:flex;align-items:center;gap:16px;width:100%;background:#0a1322;border:1px solid var(--border);border-radius:18px;color:var(--text);padding:20px;cursor:pointer;text-align:left;font-size:18px;min-height:68px}
 .btn:hover{background:#0e1830}
 .btn svg{width:32px;height:32px;flex:0 0 32px}
-
-/* Conteúdo */
 main{padding:24px;max-width:1200px;margin:0 auto}
 .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:20px}
 h2{margin:0 0 14px;font-size:22px}
-
-/* Inputs maiores */
-input,textarea{
-  width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);
-  background:#0b1220;color:var(--text);font-size:16px
-}
-
-/* Botões de ação maiores */
-.action{
-  padding:16px 22px;border-radius:14px;border:1px solid var(--border);
-  background:#0b1220;color:var(--text);cursor:pointer;font-size:16px;min-height:56px
-}
+input,textarea{width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);background:#0b1220;color:var(--text);font-size:16px}
+.action{padding:16px 22px;border-radius:14px;border:1px solid var(--border);background:#0b1220;color:var(--text);cursor:pointer;font-size:16px;min-height:56px}
 .action.primary{background:var(--accent);border:none;color:#062a16;font-weight:600}
-
 .muted{color:var(--muted);font-size:14px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-/* Grupos */
-.group-list{
-  display:grid;gap:10px;max-height:420px;overflow:auto;
-  border:1px solid var(--border);border-radius:14px;padding:12px;background:#0a1322
-}
+.group-list{display:grid;gap:10px;max-height:420px;overflow:auto;border:1px solid var(--border);border-radius:14px;padding:12px;background:#0a1322}
 .group-item{display:flex;align-items:center;gap:12px;font-size:15px}
 .group-item input{width:auto;transform:scale(1.2)}
-.group-item .id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#cbd5e1}
+.group-item .id{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;font-size:13px;color:#cbd5e1}
 .group-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-
-/* QR */
-.qr-wrap{display:grid;gap:14px}
-.qr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.qr-img{
-  width:260px;height:260px;image-rendering:pixelated;background:#0a1322;
-  border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center
-}
-.qr-status{font-size:14px;color:var(--muted)}
-.qr-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
-.qr-chip.ok{background:#16a34a22;border-color:#16a34a}
-.qr-chip.wait{background:#eab30822;border-color:#eab308}
-.qr-chip.err{background:#ef444422;border-color:#ef4444}
-
-/* Mobile / Android */
 @media(max-width:1024px){
   .app{grid-template-columns:1fr}
-  .sidebar{
-    position:fixed;left:0;top:0;bottom:0;width:86vw;max-width:340px;
-    transform:translateX(-100%);transition:transform .2s ease;z-index:40;padding:18px
-  }
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:86vw;max-width:340px;transform:translateX(-100%);transition:transform .2s ease;z-index:40;padding:18px}
   .sidebar.open{transform:translateX(0)}
-  .hamburger{
-    position:fixed;top:12px;left:12px;z-index:50;
-    background:#0a1322;border:1px solid var(--border);
-    border-radius:14px;padding:14px;cursor:pointer
-  }
+  .hamburger{position:fixed;top:12px;left:12px;z-index:50;background:#0a1322;border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer}
   .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:45}
   .scrim.show{display:block}
   .row{grid-template-columns:1fr}
@@ -98,6 +53,14 @@ input,textarea{
   .btn svg{width:34px;height:34px}
   .action{font-size:18px;padding:18px;min-height:60px}
 }
+.qr-wrap{display:grid;gap:14px}
+.qr-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.qr-img{width:260px;height:260px;image-rendering:pixelated;background:#0a1322;border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center}
+.qr-status{font-size:14px;color:var(--muted)}
+.qr-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
+.qr-chip.ok{background:#16a34a22;border-color:#16a34a}
+.qr-chip.wait{background:#eab30822;border-color:#eab308}
+.qr-chip.err{background:#ef444422;border-color:#ef4444}
 </style>
 </head>
 <body>
@@ -122,13 +85,6 @@ input,textarea{
           <path d="M5 19c1.8-3.2 12.2-3.2 14 0" stroke="#93c5fd" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <span>Login / Cadastro</span>
-      </button>
-      <button class="btn" onclick="jump('conexao')">
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="8" stroke="#34d399" stroke-width="2"/>
-          <path d="M8 12h8" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <span>Conexão WhatsApp</span>
       </button>
       <button class="btn" onclick="jump('bot')">
         <svg viewBox="0 0 24 24" fill="none">
@@ -157,6 +113,13 @@ input,textarea{
           <path d="M12 8v5l3 2" stroke="#c7d2fe" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <span>Horários</span>
+      </button>
+      <button class="btn" onclick="jump('conexao')">
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="8" stroke="#34d399" stroke-width="2"/>
+          <path d="M8 12h8" stroke="#34d399" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Conexão WhatsApp</span>
       </button>
       <button class="btn" onclick="jump('atencao')">
         <svg viewBox="0 0 24 24" fill="none">
@@ -259,20 +222,14 @@ function toggleMenu(){
   const sb=document.getElementById('sidebar'); const s=document.getElementById('scrim');
   sb.classList.toggle('open'); s.classList.toggle('show');
 }
-function jump(id){
-  document.getElementById(id)?.scrollIntoView({behavior:'smooth'});
-  if (window.matchMedia("(max-width:1024px)").matches) toggleMenu();
-}
-(function(){
-  if (window.matchMedia("(max-width:1024px)").matches)
-    document.querySelector('.hamburger').style.display='inline-flex';
-})();
+function jump(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); if (window.matchMedia("(max-width:1024px)").matches) toggleMenu(); }
+(function(){ if (window.matchMedia("(max-width:1024px)").matches) document.querySelector('.hamburger').style.display='inline-flex'; })();
 
 // --- auth + chamadas ---
 let token = localStorage.getItem('token') || '';
 function authHeaders(){ return { 'Authorization':'Bearer '+token, 'Content-Type':'application/json' }; }
 
-// render grupos
+// grupos UI
 function renderGroups(arr){
   const box=document.getElementById('groupCheckboxes');
   box.innerHTML='';
@@ -283,8 +240,6 @@ function renderGroups(arr){
     label.appendChild(cb); label.appendChild(span); box.appendChild(label);
   });
 }
-
-// filtro de grupos
 document.addEventListener('input', (e)=>{
   if(e.target && e.target.id==='buscaGrupos'){
     const q=e.target.value.toLowerCase();
@@ -294,15 +249,8 @@ document.addEventListener('input', (e)=>{
     });
   }
 });
-
-// helpers
-function marcar(on){
-  document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on);
-}
-function colocarExemplo(){
-  const demo = ["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"];
-  renderGroups(demo);
-}
+function marcar(on){ document.querySelectorAll('#groupCheckboxes input[type=checkbox]').forEach(c=> c.checked=on); }
+function colocarExemplo(){ renderGroups(["120363039593459812@g.us","120363143402885540@g.us","5511999999999-123456@g.us"]); }
 async function colarLista(){
   const txt = prompt('Cole a lista: JSON ["...@g.us",...] OU um por linha');
   if(!txt) return;
@@ -310,14 +258,13 @@ async function colarLista(){
   renderGroups(arr);
 }
 
-// --- API: auth
+// --- API ---
 async function signup(){
   const r = await fetch('/api/auth/signup', {
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ username: su_user.value, password: su_pass.value })
   });
-  const j=await r.json();
-  authStatus.textContent=JSON.stringify(j);
+  const j=await r.json(); authStatus.textContent=JSON.stringify(j);
   if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
 async function login(){
@@ -325,12 +272,10 @@ async function login(){
     method:'POST', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({ username: li_user.value, password: li_pass.value })
   });
-  const j=await r.json();
-  authStatus.textContent=JSON.stringify(j);
+  const j=await r.json(); authStatus.textContent=JSON.stringify(j);
   if(j.token){ token=j.token; localStorage.setItem('token',token); refresh(); }
 }
 
-// --- API: dados e power
 async function refresh(){
   if(!token) return;
   try{
@@ -340,36 +285,27 @@ async function refresh(){
     const g = await fetch('/api/groups', { headers:authHeaders() }).then(r=>r.json());
     if(Array.isArray(g) && g.length) renderGroups(g);
     schedule.value = await fetch('/api/schedule', { headers:authHeaders() }).then(r=>r.text());
-  }catch(e){}
+  }catch{}
 }
 async function setPower(off){
-  await fetch('/api/power', {
-    method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off })
-  });
+  await fetch('/api/power', { method:'POST', headers:authHeaders(), body: JSON.stringify({ on: !off }) });
   refresh();
 }
 async function saveMessage(){
-  await fetch('/api/message', {
-    method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value })
-  });
+  await fetch('/api/message', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: message.value }) });
   msgStatus.textContent='Salvo.';
 }
 async function saveGroups(){
-  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]'))
-    .filter(c=>c.checked).map(c=>c.value);
-  await fetch('/api/groups', {
-    method:'POST', headers:authHeaders(), body: JSON.stringify(selected)
-  });
+  const selected = Array.from(document.querySelectorAll('#groupCheckboxes input[type=checkbox]')).filter(c=>c.checked).map(c=>c.value);
+  await fetch('/api/groups', { method:'POST', headers:authHeaders(), body: JSON.stringify(selected) });
   grpStatus.textContent='Salvo.';
 }
 async function saveSchedule(){
-  await fetch('/api/schedule', {
-    method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value })
-  });
+  await fetch('/api/schedule', { method:'POST', headers:authHeaders(), body: JSON.stringify({ text: schedule.value }) });
   schStatus.textContent='Salvo.';
 }
 
-// --- QR
+// --- QR ---
 let qrTimer = null;
 function setChip(status){
   const chip = document.getElementById('qrChip');
@@ -381,11 +317,7 @@ function setChip(status){
 }
 async function qrFetch(){
   const r = await fetch('/api/qr', { headers: authHeaders() });
-  if(r.status===204){
-    setChip('connected');
-    document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>';
-    return;
-  }
+  if(r.status===204){ setChip('connected'); document.getElementById('qrImg').innerHTML='<span class="muted">Conectado</span>'; return; }
   if(r.status===202){ setChip('connecting'); return; }
   if(!r.ok){ setChip('error'); return; }
   const blob = await r.blob();
@@ -399,30 +331,24 @@ async function qrFetch(){
 }
 async function qrPoll(){
   const r = await fetch('/api/qr/status', { headers: authHeaders() });
-  if(!r.ok){ setChip('error'); return; }
+  if(!r.ok) return setChip('error');
   const j = await r.json();
   setChip(j.status);
   if(j.status==='connected'){ qrStop(); }
 }
 function qrStart(){
   if(!localStorage.getItem('token')){ alert('Faça login primeiro.'); return; }
-  qrFetch();
-  qrPoll();
+  qrFetch(); qrPoll();
   if(qrTimer) clearInterval(qrTimer);
   qrTimer = setInterval(qrPoll, 3000);
 }
-function qrStop(){
-  if(qrTimer){ clearInterval(qrTimer); qrTimer=null; }
-}
+function qrStop(){ if(qrTimer) { clearInterval(qrTimer); qrTimer=null; } }
 
 refresh();
 </script>
 
 <script>
-// PWA mínimo
-if('serviceWorker' in navigator){
-  addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}));
-}
+if('serviceWorker' in navigator){ addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{}) ); }
 </script>
 </body>
 </html>
