@@ -1,3 +1,4 @@
+# redireciona tudo que começa com /api para o Render
 [[redirects]]
   from = "/api/auth/*"
   to   = "https://zasfwsehtworhyyer.onrender.com/auth/:splat"
@@ -8,6 +9,7 @@
   to   = "https://zasfwsehtworhyyer.onrender.com/api/:splat"
   status = 200
 
+# SPA fallback
 [[redirects]]
   from = "/*"
   to   = "/index.html"
