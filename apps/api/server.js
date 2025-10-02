@@ -289,4 +289,8 @@ if(fs.existsSync(WEB_DIR)){
 }
 
 // Start
-app.listen(PORT, () => console.log('API :' + PORT));
+app.listen(PORT, () => {
+  console.log('API :' + PORT);
+  autostartAll(); // <— aqui
+});
+
