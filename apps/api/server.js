@@ -223,6 +223,62 @@ app.post('/api/qr/reset', auth, async (req, res) => {
   }
 });
 
+// --- AUTO-ATIVADOR -------------------------------------------------
+
+function isDisabled(user){
+  const d = userDir(user);
+  const p = path.join(d, 'disabled.json');
+  try { return JSON.parse(fs.readFileSync(p,'utf8')).global === true; } catch { return false; }
+}
+
+function listUsers(){
+  try {
+    return fs.readdirSync(USERS_DIR, { withFileTypes:true })
+      .filter(de => de.isDirectory())
+      .map(de => de.name)
+      .filter(u => fs.existsSync(path.join(USERS_DIR, u, 'profile.json')));
+  } catch { return []; }
+}
+
+function scheduleReconnect(user, why){
+  // aguarda um pouco e tenta de novo, desde que não esteja “desligado”
+  setTimeout(async () => {
+    if(isDisabled(user)) return;
+    const s = sessions.get(user);
+    if(!s || s.status === 'closed'){
+      try { await startSession(user); } catch {}
+    }
+  }, 3000);
+}
+
+// acrescente esses listeners dentro de startSession(user) ANTES do return:
+/// client.on('disconnected'...) e client.on('auth_failure'...) já existem.
+// troque pelos abaixo ou adicione a chamada do scheduleReconnect:
+
+// dentro de startSession(user):
+client.on('auth_failure', (msg) => { s.status = 'closed'; s.lastErr = String(msg); scheduleReconnect(user, 'auth_failure'); });
+client.on('disconnected', (reason) => { s.status = 'closed'; s.lastErr = String(reason); scheduleReconnect(user, 'disconnected'); });
+
+// sobe tudo que já tem credenciais salvas ao iniciar a API
+async function autostartAll(){
+  for(const u of listUsers()){
+    if(isDisabled(u)) continue;
+    try { await startSession(u); } catch {}
+  }
+}
+
+// watchdog: verifica a cada 60s e religa o que cair
+setInterval(() => {
+  for(const u of listUsers()){
+    if(isDisabled(u)) continue;
+    const s = sessions.get(u);
+    if(!s || s.status === 'closed') scheduleReconnect(u, 'watchdog');
+  }
+}, 60_000);
+
+// chame ao subir o servidor (abaixo do app.listen):
+// autostartAll();
+
 // ---------- Health ----------
 app.get('/health', (_, res) => res.json({ ok:true, ts: Date.now() }));
 
