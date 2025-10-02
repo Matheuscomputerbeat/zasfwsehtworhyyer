@@ -1,10 +1,8 @@
 {
-  "name": "Bot-Fly",
+  "name": "bot-fly",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=18"
-  },
+  "engines": { "node": ">=18" },
   "scripts": {
     "start": "node apps/api/server.js",
     "dev": "NODE_ENV=development node apps/api/server.js",
@@ -13,9 +11,14 @@
     "restart-bot": "node apps/api/scripts/restartBot.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "whatsapp-web.js": "^1.23.0",
-    "sqlite3": "^5.1.2",
-    "cors": "^2.8.5"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "puppeteer": "^22.15.0",
+    "qrcode": "^1.5.4",
+    "sqlite3": "^5.1.7",
+    "undici": "^6.19.8",
+    "whatsapp-web.js": "^1.23.0"
   }
 }
