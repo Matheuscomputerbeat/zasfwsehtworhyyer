@@ -17,7 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "puppeteer": "^22.15.0",
     "qrcode": "^1.5.4",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^5.1.6",
     "undici": "^6.19.8",
     "whatsapp-web.js": "^1.23.0"
   }
