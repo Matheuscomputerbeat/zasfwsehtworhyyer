@@ -5,12 +5,29 @@ services:
     plan: free
     autoDeploy: true
     region: oregon
+
+    dockerfilePath: infra/Dockerfile
+
+    # Porta exposta
     envVars:
+      - key: PORT
+        value: 8080
       - key: NODE_ENV
         value: production
       - key: JWT_SECRET
-        generateValue: true
+        generateValue: true   # gera segredo automático
       - key: ADMIN_USER
         value: admin
       - key: ADMIN_PASS
         value: supersecreto
+
+    # Health check pra Render saber se o container tá OK
+    healthCheckPath: /health
+
+    # Volumes: mantém banco SQLite entre reinícios
+    volumes:
+      - name: botfly-data
+        mountPath: /srv/data
+
+    # Restart policy: sempre tenta reiniciar se cair
+    restartPolicy: always
