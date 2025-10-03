@@ -21,7 +21,8 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const sqlite3 = require("sqlite3").verbose();
+const sqlite3 = require("better-sqlite3");
+const db = new Database('data.sqlite');
 const QRCode = require("qrcode");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
