@@ -2,23 +2,22 @@
   "name": "bot-fly",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": ">=18" },
+  "engines": { "node": "20.x" },
   "scripts": {
     "start": "node apps/api/server.js",
     "dev": "NODE_ENV=development node apps/api/server.js",
     "migrate": "node apps/api/scripts/migrate.js",
-    "seed": "node apps/api/scripts/seed.js",
-    "restart-bot": "node apps/api/scripts/restartBot.js"
+    "state:pack": "node apps/api/scripts/state.js pack",
+    "state:unpack": "node apps/api/scripts/state.js unpack"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "puppeteer": "^22.15.0",
     "qrcode": "^1.5.4",
-    "better-sqlite3": "^9.0.0",
-    "undici": "^6.19.8",
+    "tar": "^6.2.1",
     "whatsapp-web.js": "^1.23.0"
   }
 }
