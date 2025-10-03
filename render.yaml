@@ -1,33 +1,22 @@
 services:
   - type: web
-    name: bot-fly
+    name: bot-fly-api
     env: docker
     plan: free
-    autoDeploy: true
     region: oregon
-
+    autoDeploy: true
     dockerfilePath: infra/Dockerfile
-
-    # Porta exposta
+    buildFilter:
+      paths:
+        - infra/**
+        - apps/**
+        - package.json
     envVars:
       - key: PORT
         value: 8080
-      - key: NODE_ENV
-        value: production
       - key: JWT_SECRET
-        generateValue: true   # gera segredo automático
-      - key: ADMIN_USER
-        value: admin
-      - key: ADMIN_PASS
-        value: supersecreto
-
-    # Health check pra Render saber se o container tá OK
-    healthCheckPath: /health
-
-    # Volumes: mantém banco SQLite entre reinícios
-    volumes:
-      - name: botfly-data
-        mountPath: /srv/data
-
-    # Restart policy: sempre tenta reiniciar se cair
-    restartPolicy: always
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://botflyzap.netlify.app
+      - key: DATA_DIR
+        value: /srv/data
