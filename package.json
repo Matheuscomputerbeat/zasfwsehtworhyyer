@@ -2,13 +2,13 @@
   "name": "bot-fly",
   "version": "1.0.0",
   "private": true,
-  "engines": { 
-    "node": "20.x" 
-  },
+  "engines": { "node": ">=18" },
   "scripts": {
     "start": "node apps/api/server.js",
     "dev": "NODE_ENV=development node apps/api/server.js",
-    "postinstall": "npm rebuild better-sqlite3 --build-from-source"
+    "migrate": "node apps/api/scripts/migrate.js",
+    "seed": "node apps/api/scripts/seed.js",
+    "restart-bot": "node apps/api/scripts/restartBot.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
